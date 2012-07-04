@@ -112,4 +112,3 @@ func TestMultiply(t *testing.T) {
 		t.Errorf("ost*2 should be ostost\n")
 	}
 }
-

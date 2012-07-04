@@ -9,9 +9,9 @@
 package pystring
 
 import (
+	"bytes"
 	"errors"
 	"strings"
-	"bytes"
 )
 
 const (
@@ -70,7 +70,7 @@ func (p *PyString) EndsWith(text string) bool {
 		return false
 	}
 	for pos := startpos; pos < len(p.text); pos++ {
-		if p.text[pos] != text[pos - startpos] {
+		if p.text[pos] != text[pos-startpos] {
 			return false
 		}
 	}
@@ -105,11 +105,11 @@ func (p *PyString) Empty() bool {
 	return 0 == len(p.text)
 }
 
-func (p* PyString) Find(text string) int {
+func (p *PyString) Find(text string) int {
 	return strings.Index(p.text, text)
 }
 
-func (p* PyString) IsDigit() bool {
+func (p *PyString) IsDigit() bool {
 	var isDigit bool
 	if p.Empty() {
 		return false
@@ -130,27 +130,27 @@ func (p* PyString) IsDigit() bool {
 }
 
 /* Instead of a + b in Python, use a.Add(b) in Go */
-func (p* PyString) Add(text string) string {
+func (p *PyString) Add(text string) string {
 	p.text += text
 	return p.text
 }
 
 /* Append a string */
-func (p* PyString) Append(s string) {
+func (p *PyString) Append(s string) {
 	p.text += s
 }
 
 /* Remove the last occurence of a string */
-func (p* PyString) Subtract(text string) string {
+func (p *PyString) Subtract(text string) string {
 	pos := p.RFind(text)
 	if pos != -1 {
-		p.text = p.text[:pos] + p.text[pos + len(text):]
+		p.text = p.text[:pos] + p.text[pos+len(text):]
 	}
 	return p.text
 }
 
 /* Find the last occurance */
-func (p* PyString) RFind(text string) int {
+func (p *PyString) RFind(text string) int {
 	return strings.LastIndex(p.text, text)
 }
 
