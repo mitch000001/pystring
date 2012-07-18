@@ -16,29 +16,28 @@ import (
 
 const (
 	/* string.ascii_letters */
-	ASCII_letters   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	ASCII_letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	/* string.ascii_lowercase */
 	ASCII_lowercase = "abcdefghijklmnopqrstuvwxyz"
 	/* string.ascii_uppercase */
 	ASCII_uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 	/* string.digits */
-	Digits          = "0123456789"
+	Digits = "0123456789"
 	/* string.hexdigits */
-	HexDigits       = "0123456789abcdefABCDEF"
+	HexDigits = "0123456789abcdefABCDEF"
 	/* string.octdigits */
-	OctDigits       = "01234567"
+	OctDigits = "01234567"
 	/* string.punctuation */
-	Punctuation     = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+	Punctuation = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
 	/* string.printable */
-	Printable       = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c"
+	Printable = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c"
 	/* string.whitespace */
-	Whitespace      = " \t\n\r\x0b\x0c"
+	Whitespace = " \t\n\r\x0b\x0c"
 )
 
 type PyString struct {
 	text string
 }
-
 
 /*
  * Helper functions, specific to the PyString type
@@ -52,9 +51,6 @@ func New(text string) *PyString {
 func (p *PyString) Get() string {
 	return p.text
 }
-
-
-
 
 /*
  * String methods, in alphabetical order
@@ -146,9 +142,6 @@ func (p *PyString) StartsWith(text string) bool {
 	return strings.HasPrefix(p.text, text)
 }
 
-
-
-
 /*
  * String functions that exists in Python as part of
  * the syntax, like Add() instead of "+"
@@ -188,9 +181,6 @@ func (p *PyString) Multiply(n int) string {
 	return buf.String()
 }
 
-
-
-
 /*
  * Other Python-inspired functions
  */
@@ -199,9 +189,6 @@ func (p *PyString) Multiply(n int) string {
 func (p *PyString) Join(sl []string) string {
 	return strings.Join(sl, p.text)
 }
-
-
-
 
 /*
  * Functions with no direct equivivalent in Python
@@ -215,4 +202,3 @@ func (p *PyString) Subtract(text string) string {
 	}
 	return p.text
 }
-

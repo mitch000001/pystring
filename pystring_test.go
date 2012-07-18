@@ -1,8 +1,8 @@
 package pystring
 
 import (
-	"testing"
 	"os/exec"
+	"testing"
 )
 
 func TestCapitalize(t *testing.T) {
@@ -118,14 +118,14 @@ func TestMultiply(t *testing.T) {
 
 /* Checks if the constants are equal to the ones in Python by running the python interpreter.
    Also exercises the New(), Join() and Encode() functions.
- */
+*/
 func TestConstants(t *testing.T) {
 	var shouldBeBytes []byte
 	var cmd *exec.Cmd
 	constants := []string{"ascii_letters", "ascii_lowercase", "ascii_uppercase", "digits", "hexdigits", "octdigits", "punctuation", "printable", "whitespace"}
 	shouldbe := []string{ASCII_letters, ASCII_lowercase, ASCII_uppercase, Digits, HexDigits, OctDigits, Punctuation, Printable, Whitespace}
 	for i, constant := range constants {
-		cmd = exec.Command("python", "-c", "import string; print(string." + constant + ")")
+		cmd = exec.Command("python", "-c", "import string; print(string."+constant+")")
 		output, err := cmd.Output()
 		if err != nil {
 			/* One of the commands failed, assume Python is not available */
