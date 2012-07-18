@@ -1,8 +1,8 @@
 /*
  * pystring
- * Python-like strings for Go
+ * Python-like string methods for Go
  * Alexander Rødseth <rodseth@gmail.com>
- * july 2012
+ * July 2012
  * GPL2
  */
 
@@ -15,14 +15,23 @@ import (
 )
 
 const (
+	/* string.ascii_letters */
 	ASCII_letters   = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	/* string.ascii_lowercase */
 	ASCII_lowercase = "abcdefghijklmnopqrstuvwxyz"
+	/* string.ascii_uppercase */
 	ASCII_uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	/* string.digits */
 	Digits          = "0123456789"
+	/* string.hexdigits */
 	HexDigits       = "0123456789abcdefABCDEF"
+	/* string.octdigits */
 	OctDigits       = "01234567"
+	/* string.punctuation */
 	Punctuation     = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+	/* string.printable */
 	Printable       = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c"
+	/* string.whitespace */
 	Whitespace      = " \t\n\r\x0b\x0c"
 )
 
@@ -30,69 +39,13 @@ type PyString struct {
 	text string
 }
 
+
+/*
+ * Helper functions, specific to the PyString type
+ */
+
 func New(text string) *PyString {
 	return &PyString{text}
-}
-
-func (p *PyString) Capitalize() *PyString {
-	p.text = strings.Title(p.text)
-	return p
-}
-
-func (p *PyString) Strip() *PyString {
-	p.text = strings.TrimSpace(p.text)
-	return p
-}
-
-func (p *PyString) Count(text string) int {
-	return strings.Count(p.text, text)
-}
-
-func (p *PyString) Encode() []byte {
-	return []byte(p.text)
-}
-
-func (p *PyString) Index(text string) (int, error) {
-	var err error
-	i := strings.Index(p.text, text)
-	if i == -1 {
-		err = errors.New("Not found")
-	} else {
-		err = nil
-	}
-	return i, err
-}
-
-/* strings.HasSuffix should also work */
-func (p *PyString) EndsWith(text string) bool {
-	startpos := len(p.text) - len(text)
-	if startpos < 0 {
-		return false
-	}
-	for pos := startpos; pos < len(p.text); pos++ {
-		if p.text[pos] != text[pos-startpos] {
-			return false
-		}
-	}
-	return true
-}
-
-/* strings.HasPrefix should also work */
-func (p *PyString) StartsWith(text string) bool {
-	if len(text) > len(p.text) {
-		return false
-	}
-	for pos := 0; pos < len(text); pos++ {
-		if p.text[pos] != text[pos] {
-			return false
-		}
-	}
-	return true
-}
-
-/* Instead of "xyz" in x in Python, use x.Has("xyz") in Go */
-func (p *PyString) Has(text string) bool {
-	return -1 != strings.Index(p.text, text)
 }
 
 /* To fetch the string */
@@ -100,15 +53,41 @@ func (p *PyString) Get() string {
 	return p.text
 }
 
-/* Is the string empty? Instead of if s: ... in Python, use if s.Empty() { ... in Go */
-func (p *PyString) Empty() bool {
-	return 0 == len(p.text)
+
+
+
+/*
+ * String methods, in alphabetical order
+ * These are aproximately the same as in Python, some are simpler
+ */
+
+/* .capitalize() */
+func (p *PyString) Capitalize() *PyString {
+	p.text = strings.Title(p.text)
+	return p
 }
 
+/* TODO .center() */
+func (p *PyString) Center() *PyString {
+	return p
+}
+
+/* .count() */
+func (p *PyString) Count(text string) int {
+	return strings.Count(p.text, text)
+}
+
+/* .encode() */
+func (p *PyString) Encode() []byte {
+	return []byte(p.text)
+}
+
+/* .find() */
 func (p *PyString) Find(text string) int {
 	return strings.Index(p.text, text)
 }
 
+/* .isdigit() */
 func (p *PyString) IsDigit() bool {
 	var isDigit bool
 	if p.Empty() {
@@ -129,35 +108,78 @@ func (p *PyString) IsDigit() bool {
 	return true
 }
 
-/* Instead of a + b in Python, use a.Add(b) in Go */
-func (p *PyString) Add(text string) string {
-	p.text += text
-	return p.text
-}
-
-/* Append a string */
-func (p *PyString) Append(s string) {
-	p.text += s
-}
-
-/* Remove the last occurence of a string */
-func (p *PyString) Subtract(text string) string {
-	pos := p.RFind(text)
-	if pos != -1 {
-		p.text = p.text[:pos] + p.text[pos+len(text):]
-	}
-	return p.text
-}
-
-/* Find the last occurance */
+/* .rfind() */
 func (p *PyString) RFind(text string) int {
 	return strings.LastIndex(p.text, text)
 }
 
+/* .split() */
 func (p *PyString) Split(sep string) []string {
 	return strings.Split(p.text, sep)
 }
 
+/* .strip() */
+func (p *PyString) Strip() *PyString {
+	p.text = strings.TrimSpace(p.text)
+	return p
+}
+
+/* .index() */
+func (p *PyString) Index(text string) (int, error) {
+	var err error
+	i := strings.Index(p.text, text)
+	if i == -1 {
+		err = errors.New("Not found")
+	} else {
+		err = nil
+	}
+	return i, err
+}
+
+/* .endswith() */
+func (p *PyString) EndsWith(text string) bool {
+	return strings.HasSuffix(p.text, text)
+}
+
+/* .startswith() */
+func (p *PyString) StartsWith(text string) bool {
+	return strings.HasPrefix(p.text, text)
+}
+
+
+
+
+/*
+ * String functions that exists in Python as part of
+ * the syntax, like Add() instead of "+"
+ */
+
+/* Instead of "a in b" in Python, use b.Has(s) */
+func (p *PyString) Has(text string) bool {
+	return -1 != strings.Index(p.text, text)
+}
+
+/* Instead of "a in b" in Python, there is also a.In(s) */
+func (p *PyString) In(text string) bool {
+	return -1 != strings.Index(text, p.text)
+}
+
+/* Instead of if s: ... in Python, use if a.Empty() */
+func (p *PyString) Empty() bool {
+	return "" == p.text
+}
+
+/* Instead of a + b in Python, use a.Add(s) */
+func (p *PyString) Add(text string) *PyString {
+	return New(p.text + text)
+}
+
+/* Instead of += in Python, use a.Append(s) */
+func (p *PyString) Append(text string) {
+	p.text += text
+}
+
+/* Instead of * in Python, use a.Multiply(n) */
 func (p *PyString) Multiply(n int) string {
 	var buf bytes.Buffer
 	for i := 0; i < n; i++ {
@@ -165,3 +187,32 @@ func (p *PyString) Multiply(n int) string {
 	}
 	return buf.String()
 }
+
+
+
+
+/*
+ * Other Python-inspired functions
+ */
+
+/* Join a list of strings, sep.join(sl) in Python */
+func (p *PyString) Join(sl []string) string {
+	return strings.Join(sl, p.text)
+}
+
+
+
+
+/*
+ * Functions with no direct equivivalent in Python
+ */
+
+/* Remove the last occurence of a string */
+func (p *PyString) Subtract(text string) string {
+	pos := p.RFind(text)
+	if pos != -1 {
+		return p.text[:pos] + p.text[pos+len(text):]
+	}
+	return p.text
+}
+

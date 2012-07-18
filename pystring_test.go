@@ -1,6 +1,9 @@
 package pystring
 
-import "testing"
+import (
+	"testing"
+	"os/exec"
+)
 
 func TestCapitalize(t *testing.T) {
 	const in, out = "hello", "Hello"
@@ -79,7 +82,7 @@ func TestIsDigit(t *testing.T) {
 
 func TestAdd(t *testing.T) {
 	a := New("abc")
-	if a.Add("cde") != "abccde" {
+	if a.Add("cde").Get() != "abccde" {
 		t.Errorf("abc + cde should be abccde\n")
 	}
 }
@@ -110,5 +113,35 @@ func TestMultiply(t *testing.T) {
 	b := New("ost")
 	if b.Multiply(2) != "ostost" {
 		t.Errorf("ost*2 should be ostost\n")
+	}
+}
+
+/* Checks if the constants are equal to the ones in Python by running the python interpreter.
+   Also exercises the New(), Join() and Encode() functions.
+ */
+func TestConstants(t *testing.T) {
+	var shouldBeBytes []byte
+	var cmd *exec.Cmd
+	constants := []string{"ascii_letters", "ascii_lowercase", "ascii_uppercase", "digits", "hexdigits", "octdigits", "punctuation", "printable", "whitespace"}
+	shouldbe := []string{ASCII_letters, ASCII_lowercase, ASCII_uppercase, Digits, HexDigits, OctDigits, Punctuation, Printable, Whitespace}
+	for i, constant := range constants {
+		cmd = exec.Command("python", "-c", "import string; print(string." + constant + ")")
+		output, err := cmd.Output()
+		if err != nil {
+			/* One of the commands failed, assume Python is not available */
+			// This can be used if one doesn't want to ignore the lack of python:
+			//t.Errorf("execution failed: %s %s\n", New(" ").Join(cmd.Args), output)
+			return
+		}
+		shouldBeBytes = New(shouldbe[i]).Encode()
+		for i2, b := range shouldBeBytes {
+			if (i2 >= len(output)) || (b != output[i2]) {
+				if len(output) == 0 {
+					output = New("no output").Encode()
+				}
+				t.Errorf("constant %s failed, got: %s\n", constants[i], output)
+				return
+			}
+		}
 	}
 }
