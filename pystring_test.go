@@ -116,6 +116,13 @@ func TestMultiply(t *testing.T) {
 	}
 }
 
+func TestMultiplyUnicode(t *testing.T) {
+	a := New("┐")
+	if a.Multiply(5) != "┐┐┐┐┐" {
+		t.Errorf("a*5 should be ┐┐┐┐┐\n")
+	}
+}
+
 /* Checks if the constants are equal to the ones in Python by running the python interpreter.
    Also exercises the New(), Join() and Encode() functions.
 */

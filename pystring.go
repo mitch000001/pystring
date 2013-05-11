@@ -1,3 +1,5 @@
+package pystring
+
 /*
  * pystring
  * Python-like string methods for Go
@@ -5,8 +7,6 @@
  * July 2012
  * GPL2
  */
-
-package pystring
 
 import (
 	"bytes"

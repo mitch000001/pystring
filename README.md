@@ -3,6 +3,8 @@ pystring
 
 Python-like strings for Go
 
-Only a few methods are implemented so far.
-Patches and improvements are welcome.
+Only some of the string methods available in Python are implemented so far.
+Pull requests are welcome.
 
+GPL2
+Alexander Rødseth, 2013
