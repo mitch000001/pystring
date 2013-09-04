@@ -2,9 +2,13 @@ package pystring
 
 /*
  * pystring
+ *
  * Python-like string methods for Go
  * Alexander Rødseth <rodseth@gmail.com>
+ *
  * July 2012
+ * September 2013
+ *
  * GPL2
  */
 
@@ -12,6 +16,7 @@ import (
 	"bytes"
 	"errors"
 	"strings"
+	"fmt"
 )
 
 const (
@@ -48,7 +53,7 @@ func New(text string) *PyString {
 }
 
 /* To fetch the string */
-func (p *PyString) Get() string {
+func (p *PyString) String() string {
 	return p.text
 }
 
@@ -65,6 +70,7 @@ func (p *PyString) Capitalize() *PyString {
 
 /* TODO .center() */
 func (p *PyString) Center() *PyString {
+	fmt.Println("to be implemented")
 	return p
 }
 
@@ -85,6 +91,7 @@ func (p *PyString) EndsWith(text string) bool {
 
 /* TODO .expandtabs() */
 func (p *PyString) ExpandTabs() *PyString {
+	fmt.Println("to be implemented")
 	return p
 }
 
@@ -95,11 +102,13 @@ func (p *PyString) Find(text string) int {
 
 /* TODO .format() */
 func (p *PyString) Format() *PyString {
+	fmt.Println("to be implemented")
 	return p
 }
 
 /* TODO .format_map() */
 func (p *PyString) FormatMap() *PyString {
+	fmt.Println("to be implemented")
 	return p
 }
 
@@ -117,16 +126,19 @@ func (p *PyString) Index(text string) (int, error) {
 
 /* TODO .isalnum() */
 func (p *PyString) IsAlNum() *PyString {
+	fmt.Println("to be implemented")
 	return p
 }
 
 /* TODO .isalpha() */
 func (p *PyString) IsAlpha() *PyString {
+	fmt.Println("to be implemented")
 	return p
 }
 
 /* TODO .isdecimal() */
 func (p *PyString) IsDecimal() *PyString {
+	fmt.Println("to be implemented")
 	return p
 }
 
@@ -153,36 +165,43 @@ func (p *PyString) IsDigit() bool {
 
 /* TODO .isidentifier() */
 func (p *PyString) IsIdentifier(text string) bool {
+	fmt.Println("to be implemented")
 	return false
 }
 
 /* TODO .islower() */
 func (p *PyString) IsLower(text string) bool {
+	fmt.Println("to be implemented")
 	return false
 }
 
 /* TODO .isnumeric() */
 func (p *PyString) IsNumeric(text string) bool {
+	fmt.Println("to be implemented")
 	return false
 }
 
 /* TODO .isprintable() */
 func (p *PyString) IsPrintable(text string) bool {
+	fmt.Println("to be implemented")
 	return false
 }
 
 /* TODO .isspace() */
 func (p *PyString) IsSpace(text string) bool {
+	fmt.Println("to be implemented")
 	return false
 }
 
 /* TODO .istitle() */
 func (p *PyString) IsTitle(text string) bool {
+	fmt.Println("to be implemented")
 	return false
 }
 
 /* TODO .isupper() */
 func (p *PyString) IsUpper(text string) bool {
+	fmt.Println("to be implemented")
 	return false
 }
 
@@ -191,7 +210,13 @@ func (p *PyString) Join(sl []string) string {
 	return strings.Join(sl, p.text)
 }
 
-// TODO ljust, lower, lstrip, maketrans, partition, replace
+// TODO ljust, lower, lstrip, maketrans, partition
+
+/* .replace() */
+// replaces all ocurrances of a with b
+func (p *PyString) Replace(a, b string) {
+	p.text = strings.Replace(p.text, a, b, -1)
+}
 
 /* .rfind() */
 func (p *PyString) RFind(text string) int {
@@ -205,7 +230,19 @@ func (p *PyString) Split(sep string) []string {
 	return strings.Split(p.text, sep)
 }
 
-// TODO .splitlines()
+// Helper function for checking if a string is empty or not
+func nonempty(s string) bool {
+	return s != ""
+}
+
+// .splitlines()
+func (p *PyString) SplitLines() []string {
+	// Split a string on any newline: \n, \r or \r\n
+	s := p.text
+	s = strings.Replace(s, "\r", "\n", -1)
+	s = strings.Replace(s, "\r\n", "\n", -1)
+	return MapS(strings.TrimSpace, FilterS(nonempty, strings.Split(s, "\n")))
+}
 
 /* .startswith() */
 func (p *PyString) StartsWith(text string) bool {
@@ -270,4 +307,24 @@ func (p *PyString) Subtract(text string) string {
 		return p.text[:pos] + p.text[pos+len(text):]
 	}
 	return p.text
+}
+
+/* Map a function on each element of a slice of strings */
+func MapS(f func (string) string, sl []string) (result []string) {
+	result = make([]string, len(sl), len(sl))
+	for i, _ := range sl {
+		result[i] = f(sl[i])
+	}
+	return result
+}
+
+/* Filter out all strings where the function does not return true */
+func FilterS(f func (string) bool, sl []string) (result []string) {
+	result = make([]string, 0, 0)
+	for i, _ := range sl {
+		if f(sl[i]) {
+			result = append(result, sl[i])
+		}
+	}
+	return result
 }

@@ -3,11 +3,13 @@ package pystring
 import (
 	"os/exec"
 	"testing"
+	"fmt"
+	"strings"
 )
 
 func TestCapitalize(t *testing.T) {
 	const in, out = "hello", "Hello"
-	result := New(in).Capitalize().Get()
+	result := New(in).Capitalize().String()
 	if out != result {
 		t.Errorf("Capitalized version of %v did not become %v, but %v!\n", in, out, result)
 	}
@@ -15,7 +17,7 @@ func TestCapitalize(t *testing.T) {
 
 func TestStrip(t *testing.T) {
 	const in, out = "    \n\n\nhello\t\t\n\n\n", "hello"
-	result := New(in).Strip().Get()
+	result := New(in).Strip().String()
 	if out != result {
 		t.Errorf("Stripped version of %v did not become %v, but %v!\n", in, out, result)
 	}
@@ -82,7 +84,7 @@ func TestIsDigit(t *testing.T) {
 
 func TestAdd(t *testing.T) {
 	a := New("abc")
-	if a.Add("cde").Get() != "abccde" {
+	if a.Add("cde").String() != "abccde" {
 		t.Errorf("abc + cde should be abccde\n")
 	}
 }
@@ -150,5 +152,31 @@ func TestConstants(t *testing.T) {
 				return
 			}
 		}
+	}
+}
+
+func TestReplace(t *testing.T) {
+	a := New("hello")
+	a.Replace("l", "p")
+	if a.String() != "heppo" {
+		t.Errorf("hello with l replaced should be heppo\n")
+	}
+}
+
+func TestSplitLines(t *testing.T) {
+	s := "First line, with LF\nSecond line, with CR\rThird line, with CRLF\r\n" +
+	     "Two blank lines with LFs\n\n\nTwo blank lines with CRs\r\r\rTwo blank" +
+		 "lines with CRLFs\r\n\r\n\r\nThree blank lines with a jumble of things:" +
+		 "\r\n\r\r\n\nEnd without a newline."
+	s2 := "First line, with LF\nSecond line, with CR\nThird line, with CRLF\n" +
+	     "Two blank lines with LFs\nTwo blank lines with CRs\nTwo blank" +
+		 "lines with CRLFs\nThree blank lines with a jumble of things:" +
+		 "\nEnd without a newline."
+	a := New(s)
+	lines := a.SplitLines()
+	joined := strings.Join(lines, "\n")
+	fmt.Println(joined)
+	if joined != s2 {
+		t.Errorf("SplitLines does not work correctly, is %s, but should be %s.\n", joined, s2)
 	}
 }
