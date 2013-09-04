@@ -232,7 +232,7 @@ func (p *PyString) Split(sep string) []string {
 
 // Helper function for checking if a string is empty or not
 func nonempty(s string) bool {
-	return s != ""
+	return strings.TrimSpace(s) != ""
 }
 
 func trimnewlines(s string) string {
