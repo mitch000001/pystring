@@ -232,9 +232,15 @@ func (p *PyString) Split(sep string) []string {
 
 // Helper function for checking if a string is empty or not
 func nonempty(s string) bool {
+	return trimnewlines(s) != ""
+}
+
+// Helper function for checking if a string is empty or not
+func noblanklines(s string) bool {
 	return strings.TrimSpace(s) != ""
 }
 
+// Helper function for trimming away newlines:
 func trimnewlines(s string) string {
 	return strings.Trim(s, "\r\n")
 }
@@ -332,3 +338,14 @@ func FilterS(f func (string) bool, sl []string) (result []string) {
 	}
 	return result
 }
+
+// Split into lines that have content and are not blank
+func (p *PyString) SplitNoblankLines() []string {
+	// Split a string on any newline: \n, \r or \r\n
+	s := p.text
+	s = strings.Replace(s, "\r", "\n", -1)
+	s = strings.Replace(s, "\r\n", "\n", -1)
+	return FilterS(noblanklines, FilterS(nonempty, strings.Split(s, "\n")))
+}
+
+
