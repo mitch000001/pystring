@@ -235,13 +235,17 @@ func nonempty(s string) bool {
 	return s != ""
 }
 
+func trimnewlines(s string) string {
+	return strings.Trim(s, "\r\n")
+}
+
 // .splitlines()
 func (p *PyString) SplitLines() []string {
 	// Split a string on any newline: \n, \r or \r\n
 	s := p.text
 	s = strings.Replace(s, "\r", "\n", -1)
 	s = strings.Replace(s, "\r\n", "\n", -1)
-	return MapS(strings.TrimSpace, FilterS(nonempty, strings.Split(s, "\n")))
+	return MapS(trimnewlines, FilterS(nonempty, strings.Split(s, "\n")))
 }
 
 /* .startswith() */
