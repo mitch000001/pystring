@@ -1,10 +1,10 @@
 package pystring
 
 import (
-	"os/exec"
-	"testing"
 	"fmt"
+	"os/exec"
 	"strings"
+	"testing"
 )
 
 func TestCapitalize(t *testing.T) {
@@ -165,13 +165,13 @@ func TestReplace(t *testing.T) {
 
 func TestSplitLines(t *testing.T) {
 	s := "First line, with LF\nSecond line, with CR\rThird line, with CRLF\r\n" +
-	     "Two blank lines with LFs\n\n\nTwo blank lines with CRs\r\r\rTwo blank" +
-		 "lines with CRLFs\r\n\r\n\r\nThree blank lines with a jumble of things:" +
-		 "\r\n\r\r\n\nEnd without a newline."
+		"Two blank lines with LFs\n\n\nTwo blank lines with CRs\r\r\rTwo blank" +
+		"lines with CRLFs\r\n\r\n\r\nThree blank lines with a jumble of things:" +
+		"\r\n\r\r\n\nEnd without a newline."
 	s2 := "First line, with LF\nSecond line, with CR\nThird line, with CRLF\n" +
-	     "Two blank lines with LFs\nTwo blank lines with CRs\nTwo blank" +
-		 "lines with CRLFs\nThree blank lines with a jumble of things:" +
-		 "\nEnd without a newline."
+		"Two blank lines with LFs\nTwo blank lines with CRs\nTwo blank" +
+		"lines with CRLFs\nThree blank lines with a jumble of things:" +
+		"\nEnd without a newline."
 	a := New(s)
 	lines := a.SplitLines()
 	joined := strings.Join(lines, "\n")

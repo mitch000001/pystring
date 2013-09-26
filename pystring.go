@@ -15,8 +15,8 @@ package pystring
 import (
 	"bytes"
 	"errors"
-	"strings"
 	"fmt"
+	"strings"
 )
 
 const (
@@ -320,7 +320,7 @@ func (p *PyString) Subtract(text string) string {
 }
 
 /* Map a function on each element of a slice of strings */
-func MapS(f func (string) string, sl []string) (result []string) {
+func MapS(f func(string) string, sl []string) (result []string) {
 	result = make([]string, len(sl), len(sl))
 	for i, _ := range sl {
 		result[i] = f(sl[i])
@@ -329,7 +329,7 @@ func MapS(f func (string) string, sl []string) (result []string) {
 }
 
 /* Filter out all strings where the function does not return true */
-func FilterS(f func (string) bool, sl []string) (result []string) {
+func FilterS(f func(string) bool, sl []string) (result []string) {
 	result = make([]string, 0, 0)
 	for i, _ := range sl {
 		if f(sl[i]) {
@@ -347,5 +347,3 @@ func (p *PyString) SplitNoblankLines() []string {
 	s = strings.Replace(s, "\r\n", "\n", -1)
 	return FilterS(noblanklines, FilterS(nonempty, strings.Split(s, "\n")))
 }
-
-
