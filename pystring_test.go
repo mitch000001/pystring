@@ -134,7 +134,8 @@ func TestConstants(t *testing.T) {
 	constants := []string{"ascii_letters", "ascii_lowercase", "ascii_uppercase", "digits", "hexdigits", "octdigits", "punctuation", "printable", "whitespace"}
 	shouldbe := []string{ASCII_letters, ASCII_lowercase, ASCII_uppercase, Digits, HexDigits, OctDigits, Punctuation, Printable, Whitespace}
 	for i, constant := range constants {
-		cmd = exec.Command("python", "-c", "import string; print(string."+constant+")")
+		// Make sure to use python3. Tested on Fedora and Arch Linux.
+		cmd = exec.Command("python3", "-c", "import string; print(string."+constant+")")
 		output, err := cmd.Output()
 		if err != nil {
 			/* One of the commands failed, assume Python is not available */
