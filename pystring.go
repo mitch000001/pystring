@@ -347,3 +347,15 @@ func (p *PyString) SplitNoblankLines() []string {
 	s = strings.Replace(s, "\r\n", "\n", -1)
 	return FilterS(noblanklines, FilterS(nonempty, strings.Split(s, "\n")))
 }
+
+// --- For convenience ---
+
+// Repeat a string n number of times
+func Repeat(text string, n int) string {
+	return New(text).Multiply(n)
+}
+
+// Split a string on any newline: \n, \r or \r\n
+func Splitlines(text string) []string {
+	return New(text).SplitLines()
+}
